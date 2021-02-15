@@ -304,8 +304,8 @@ class Seq2Seq(nn.Module):
 ################### 3- Training the Seq2Seq Model #######################
 INPUT_DIM = len(SRC.vocab)
 OUTPUT_DIM = len(TRG.vocab)
-ENC_EMB_DIM = 256
-DEC_EMB_DIM = 256
+ENC_EMB_DIM = 300
+DEC_EMB_DIM = 300
 ENC_HID_DIM = 512
 DEC_HID_DIM = 512
 ENC_DROPOUT = 0.5
