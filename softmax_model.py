@@ -1,3 +1,5 @@
+#code from https://github.com/bentrevett/pytorch-seq2seq/blob/master/4%20-%20Packed%20Padded%20Sequences%2C%20Masking%2C%20Inference%20and%20BLEU.ipynb
+
 import torch
 import torch.nn as nn
 import torch.optim as optim
