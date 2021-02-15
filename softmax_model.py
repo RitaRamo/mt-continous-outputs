@@ -32,7 +32,7 @@ torch.backends.cudnn.deterministic = True
 
 ################### 1- Preparing Data #######################
 
-spacy_de = spacy.load('de_core_web_sm')
+spacy_de = spacy.load('de_core_news_sm')
 spacy_en = spacy.load('en_core_web_sm')
 
 def tokenize_de(text):
