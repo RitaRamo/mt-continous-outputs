@@ -482,7 +482,7 @@ def calculate_bleu(data, src_field, trg_field, model, device, max_len = 50):
 
 
 if __name__ == '__main__':
-    N_EPOCHS = 1
+    N_EPOCHS = 10
     CLIP = 1
 
     best_valid_loss = float('inf')
@@ -497,7 +497,10 @@ if __name__ == '__main__':
         end_time = time.time()
         
         epoch_mins, epoch_secs = epoch_time(start_time, end_time)
-        
+        print("\nepochs n", epoch)
+        print("train loss", train_loss)
+        print("valid_loss", valid_loss)
+
         if valid_loss < best_valid_loss:
             best_valid_loss = valid_loss
             torch.save(model.state_dict(), 'tut4-model.pt')
