@@ -376,7 +376,7 @@ def train(model, iterator, optimizer, criterion, clip):
         
     return epoch_loss / len(iterator)
 
-    
+def evaluate(model, iterator, criterion):   
     model.eval()
     
     epoch_loss = 0
