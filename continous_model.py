@@ -67,7 +67,6 @@ SRC.build_vocab(train_data, min_freq = 2)
 TRG.build_vocab(train_data, vectors = "glove.6B.300d", min_freq = 2)
 
 print(vars(train_data.examples[0]))
-print(stop)
 
 BATCH_SIZE = 128
 
