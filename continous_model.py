@@ -531,13 +531,13 @@ def calculate_bleu(data, src_field, trg_field, model, device, max_len = 50):
         pred_trgs.append(pred_trg)
         trgs.append([trg])
 
-    print("pred trg", pred_trg)
+        print("pred trg", pred_trg)
         
     return bleu_score(pred_trgs, trgs)
 
 
 if __name__ == '__main__':
-    N_EPOCHS = 20
+    N_EPOCHS = 40
     CLIP = 1
 
     best_valid_loss = float('inf')
