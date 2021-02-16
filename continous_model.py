@@ -380,9 +380,9 @@ def train(model, iterator, optimizer, criterion, clip):
         trg = model.decoder.embedding(trg)
 
         preds = nn.utils.rnn.pack_padded_sequence(
-            output, trg_len, batch_first=True)
+            output, trg_len.to("cpu"), batch_first=True)
         targets = nn.utils.rnn.pack_padded_sequence(
-            trg, trg_len, batch_first=True)
+            trg, trg_len.to("cpu"), batch_first=True)
 
         y = torch.ones(targets.data.shape[0]).to(device)
         loss = criterion(preds.data, targets.data, y)
@@ -441,9 +441,9 @@ def evaluate(model, iterator, criterion):
             trg = model.decoder.embedding(trg)
 
             preds = nn.utils.rnn.pack_padded_sequence(
-                output, trg_len, batch_first=True)
+                output, trg_len.to("cpu"), batch_first=True)
             targets = nn.utils.rnn.pack_padded_sequence(
-                trg, trg_len, batch_first=True)
+                trg, trg_len.to("cpu"), batch_first=True)
 
             y = torch.ones(targets.data.shape[0]).to(device)
             loss = criterion(preds.data, targets.data, y)
@@ -524,13 +524,14 @@ def calculate_bleu(data, src_field, trg_field, model, device, max_len = 50):
         trg = vars(datum)['trg']
         
         pred_trg, _ = translate_sentence(src, src_field, trg_field, model, device, max_len)
-        print("pred trg", pred_trg)
         
         #cut off <eos> token
         pred_trg = pred_trg[:-1]
         
         pred_trgs.append(pred_trg)
         trgs.append([trg])
+
+    print("pred trg", pred_trg)
         
     return bleu_score(pred_trgs, trgs)
 
