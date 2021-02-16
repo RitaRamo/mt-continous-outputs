@@ -62,7 +62,7 @@ TRG = Field(tokenize = tokenize_en,
 train_data, valid_data, test_data = Multi30k.splits(exts = ('.de', '.en'), 
                                                     fields = (SRC, TRG))
 
-SRC.build_vocab(train_data, vectors = "glove.6B.300d", min_freq = 2)
+SRC.build_vocab(train_data, min_freq = 2)
 TRG.build_vocab(train_data, vectors = "glove.6B.300d", min_freq = 2)
 
 BATCH_SIZE = 128
@@ -304,7 +304,7 @@ class Seq2Seq(nn.Module):
 ################### 3- Training the Seq2Seq Model #######################
 INPUT_DIM = len(SRC.vocab)
 OUTPUT_DIM = len(TRG.vocab)
-ENC_EMB_DIM = 300
+ENC_EMB_DIM = 256
 DEC_EMB_DIM = 300
 ENC_HID_DIM = 512
 DEC_HID_DIM = 512
@@ -327,9 +327,9 @@ def init_weights(m):
             
 model.apply(init_weights)
 
-pretrained_embeddings = SRC.vocab.vectors
-model.encoder.embedding.weight.data.copy_(pretrained_embeddings)
-model.encoder.embedding.weight.requires_grad = False
+#pretrained_embeddings = SRC.vocab.vectors
+#model.encoder.embedding.weight.data.copy_(pretrained_embeddings)
+#model.encoder.embedding.weight.requires_grad = False
 
 pretrained_embeddings_dec = TRG.vocab.vectors
 model.decoder.embedding.weight.data.copy_(pretrained_embeddings_dec)
