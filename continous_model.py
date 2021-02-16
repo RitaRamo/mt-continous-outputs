@@ -537,7 +537,7 @@ def calculate_bleu(data, src_field, trg_field, model, device, max_len = 50):
 
 
 if __name__ == '__main__':
-    N_EPOCHS = 7
+    N_EPOCHS = 20
     CLIP = 1
 
     best_valid_loss = float('inf')
