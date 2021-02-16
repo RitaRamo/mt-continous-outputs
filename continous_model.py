@@ -39,13 +39,13 @@ def tokenize_de(text):
     """
     Tokenizes German text from a string into a list of strings
     """
-    return [tok.text for tok in spacy_de.tokenizer(text)]
+    return [tok.text for tok in spacy_de.tokenizer(text) if tok.text != "."]
 
 def tokenize_en(text):
     """
     Tokenizes English text from a string into a list of strings
     """
-    return [tok.text for tok in spacy_en.tokenizer(text)]
+    return [tok.text for tok in spacy_en.tokenizer(text) if tok.text != "."]
 
 
 SRC = Field(tokenize = tokenize_de, 
@@ -65,6 +65,9 @@ train_data, valid_data, test_data = Multi30k.splits(exts = ('.de', '.en'),
 
 SRC.build_vocab(train_data, min_freq = 2)
 TRG.build_vocab(train_data, vectors = "glove.6B.300d", min_freq = 2)
+
+print(vars(train_data.examples[0]))
+print(stop)
 
 BATCH_SIZE = 128
 
@@ -537,7 +540,7 @@ def calculate_bleu(data, src_field, trg_field, model, device, max_len = 50):
 
 
 if __name__ == '__main__':
-    N_EPOCHS = 40
+    N_EPOCHS = 23
     CLIP = 1
 
     best_valid_loss = float('inf')
@@ -561,13 +564,13 @@ if __name__ == '__main__':
             torch.save(model.state_dict(), 'tut4-model.pt')
         
     print(f'Epoch: {epoch+1:02} | Time: {epoch_mins}m {epoch_secs}s')
-    print(f'\tTrain Loss: {train_loss:.3f} | Train PPL: {math.exp(train_loss):7.3f}')
-    print(f'\t Val. Loss: {valid_loss:.3f} |  Val. PPL: {math.exp(valid_loss):7.3f}')
+    print(f'\tTrain Loss: {train_loss:.3f}')
+    print(f'\t Val. Loss: {valid_loss:.3f}')
 
     model.load_state_dict(torch.load('tut4-model.pt'))
     test_loss = evaluate(model, test_iterator, criterion)
 
-    print(f'| Test Loss: {test_loss:.3f} | Test PPL: {math.exp(test_loss):7.3f} |')
+    print(f'| Test Loss: {test_loss:.3f}')
 
     bleu_score = calculate_bleu(test_data, SRC, TRG, model, device)
     print(f'BLEU score = {bleu_score*100:.2f}')
