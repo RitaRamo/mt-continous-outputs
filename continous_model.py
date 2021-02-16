@@ -64,7 +64,7 @@ train_data, valid_data, test_data = Multi30k.splits(exts = ('.de', '.en'),
                                                     fields = (SRC, TRG))
 
 SRC.build_vocab(train_data, min_freq = 2)
-TRG.build_vocab(train_data, vectors = "glove.6B.300d", min_freq = 2)
+TRG.build_vocab(train_data, vectors = "fasttext.en.300d", min_freq = 2)
 
 print(vars(train_data.examples[0]))
 
