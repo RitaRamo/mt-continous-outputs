@@ -39,13 +39,13 @@ def tokenize_de(text):
     """
     Tokenizes German text from a string into a list of strings
     """
-    return [tok.text for tok in spacy_de.tokenizer(text) if tok.text != "."]
+    return [tok.text for tok in spacy_de.tokenizer(text)]
 
 def tokenize_en(text):
     """
     Tokenizes English text from a string into a list of strings
     """
-    return [tok.text for tok in spacy_en.tokenizer(text) if tok.text != "."]
+    return [tok.text for tok in spacy_en.tokenizer(text)]
 
 
 SRC = Field(tokenize = tokenize_de, 
