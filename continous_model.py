@@ -77,7 +77,7 @@ print(vars(train_data.examples[0]))
 print("My iter", next(iter(MyIter())))
 
 
-w2v_model = FastText(vector_size=4, window=3, min_count=1)
+w2v_model = FastText(size=300, window=3, min_count=2)
 w2v_model.build_vocab(sentences=MyIter())
 total_examples = w2v_model.corpus_count
 print("total exam", total_examples)
