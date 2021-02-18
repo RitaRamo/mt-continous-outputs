@@ -72,7 +72,7 @@ train_data, valid_data, test_data = Multi30k.splits(exts = ('.de', '.en'),
 class MyIter:
     def __iter__(self):
         for i in range(len(train_data)):
-            yield [<sos>]+ vars(train_data.examples[i])["trg"] + [<eos>]
+            yield ["<sos>"]+ vars(train_data.examples[i])["trg"] + ["<eos>"]
 
 
 print("len train", len(train_data))
