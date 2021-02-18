@@ -1,4 +1,5 @@
 #code from https://github.com/bentrevett/pytorch-seq2seq/blob/master/4%20-%20Packed%20Padded%20Sequences%2C%20Masking%2C%20Inference%20and%20BLEU.ipynb
+#training embddings from https://medium.com/@rohit_agrawal/using-fine-tuned-gensim-word2vec-embeddings-with-torchtext-and-pytorch-17eea2883cd
 
 import torch
 import torch.nn as nn
@@ -19,6 +20,7 @@ import math
 import time
 
 from torchtext.data.metrics import bleu_score
+from gensim.models import FastText
 
 
 SEED = 1234
@@ -63,10 +65,31 @@ TRG = Field(tokenize = tokenize_en,
 train_data, valid_data, test_data = Multi30k.splits(exts = ('.de', '.en'), 
                                                     fields = (SRC, TRG))
 
+
+class MyIter:
+    def __iter__(self):
+        for i in range(len(train_data)):
+            yield vars(train_data.examples[0])["trg"]
+
+
+print("len train", len(train_data))
+print(vars(train_data.examples[0]))
+print("My iter", next(iter(MyIter())))
+
+
+w2v_model = FastText(vector_size=4, window=3, min_count=1)
+w2v_model.build_vocab(sentences=MyIter())
+total_examples = w2v_model.corpus_count
+print("total exam", total_examples)
+w2v_model.train(sentences=MyIter(), total_examples=total_examples, epochs=5)
+w2v_model.save('trained_embeddings.txt')
+
+print(stop)
+
+#print(stop)
+
 SRC.build_vocab(train_data, min_freq = 2)
 TRG.build_vocab(train_data, vectors = "fasttext.en.300d", min_freq = 2)
-
-print(vars(train_data.examples[0]))
 
 BATCH_SIZE = 128
 
@@ -78,6 +101,13 @@ train_iterator, valid_iterator, test_iterator = BucketIterator.splits(
      sort_within_batch = True,
      sort_key = lambda x : len(x.src),
      device = device)
+
+for datum in train_iterator:
+    src = vars(datum)['src']
+    trg = vars(datum)['trg']
+    print("trg", trg)
+    print(stop)
+    break
 
 
 ################### 2- Building the Model #######################
