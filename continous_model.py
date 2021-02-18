@@ -98,7 +98,7 @@ TRG.build_vocab(train_data, min_freq = 2)
 
 w2v_model = FastText.load('trained_embeddings.txt')
 word2vec_vectors = []
-for token, idx in tqdm_notebook(TEXT.vocab.stoi.items()):
+for token, idx in tqdm_notebook(TRG.vocab.stoi.items()):
     if token in w2v_model.wv.vocab.keys():
         word2vec_vectors.append(torch.FloatTensor(w2v_model[token]))
     else:
