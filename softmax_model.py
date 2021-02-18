@@ -485,6 +485,8 @@ def calculate_bleu(data, src_field, trg_field, model, device, max_len = 50):
         
         pred_trgs.append(pred_trg)
         trgs.append([trg])
+
+        print("pred trg", pred_trg)
         
     return bleu_score(pred_trgs, trgs)
 
