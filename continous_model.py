@@ -68,30 +68,46 @@ train_data, valid_data, test_data = Multi30k.splits(exts = ('.de', '.en'),
                                                     fields = (SRC, TRG))
 
 
-class MyIter:
-    def __iter__(self):
-        for i in range(len(train_data)):
-            yield vars(train_data.examples[0])["trg"]
+# class MyIter:
+#     def __iter__(self):
+#         for i in range(len(train_data)):
+#             yield vars(train_data.examples[0])["trg"]
 
 
-print("len train", len(train_data))
-print(vars(train_data.examples[0]))
-print("My iter", next(iter(MyIter())))
+# print("len train", len(train_data))
+# print(vars(train_data.examples[0]))
+# print("My iter", next(iter(MyIter())))
 
 
-w2v_model = FastText(size=300, window=3, min_count=2)
-w2v_model.build_vocab(sentences=MyIter())
-total_examples = w2v_model.corpus_count
-print("total exam", total_examples)
-w2v_model.train(sentences=MyIter(), total_examples=total_examples, epochs=5)
-w2v_model.save('trained_embeddings.txt')
+# w2v_model = FastText(size=300, window=3, min_count=2)
+# w2v_model.build_vocab(sentences=MyIter())
+# total_examples = w2v_model.corpus_count
+# print("total exam", total_examples)
+# w2v_model.train(sentences=MyIter(), total_examples=total_examples, epochs=5)
+# w2v_model.save('trained_embeddings.txt')
 
-print(stop)
+# print(stop)
 
 #print(stop)
 
 SRC.build_vocab(train_data, min_freq = 2)
-TRG.build_vocab(train_data, vectors = "fasttext.en.300d", min_freq = 2)
+#TRG.build_vocab(train_data, vectors = "fasttext.en.300d", min_freq = 2)
+TRG.build_vocab(train_data, min_freq = 2)
+
+
+w2v_model = FastText.load('trained_embeddings.txt')
+word2vec_vectors = []
+for token, idx in tqdm_notebook(TEXT.vocab.stoi.items()):
+    if token in w2v_model.wv.vocab.keys():
+        word2vec_vectors.append(torch.FloatTensor(w2v_model[token]))
+    else:
+        print("Not possible since fasttext")
+        print(stop)
+        word2vec_vectors.append(torch.zeros(300))
+
+TRG.vocab.set_vectors(TRG.vocab.stoi, word2vec_vectors, 300)
+
+
 
 BATCH_SIZE = 128
 
@@ -368,9 +384,13 @@ model.apply(init_weights)
 #model.encoder.embedding.weight.data.copy_(pretrained_embeddings)
 #model.encoder.embedding.weight.requires_grad = False
 
-pretrained_embeddings_dec = TRG.vocab.vectors
+pre_trained_emb = torch.FloatTensor(TRG.vocab.vectors)
 model.decoder.embedding.weight.data.copy_(pretrained_embeddings_dec)
 model.decoder.embedding.weight.requires_grad = False
+
+# pretrained_embeddings_dec = TRG.vocab.vectors
+# model.decoder.embedding.weight.data.copy_(pretrained_embeddings_dec)
+# model.decoder.embedding.weight.requires_grad = False
 
 def count_parameters(model):
     return sum(p.numel() for p in model.parameters() if p.requires_grad)
