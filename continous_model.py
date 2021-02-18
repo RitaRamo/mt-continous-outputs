@@ -22,6 +22,7 @@ import time
 from torchtext.data.metrics import bleu_score
 import logging
 from gensim.models import FastText
+from tqdm import tqdm_notebook
 
 
 SEED = 1234
