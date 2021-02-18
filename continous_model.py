@@ -98,15 +98,21 @@ TRG.build_vocab(train_data, min_freq = 2)
 
 w2v_model = FastText.load('trained_embeddings.txt')
 word2vec_vectors = []
+count_unk=0
+count_know=0
 for token, idx in tqdm_notebook(TRG.vocab.stoi.items()):
     if token in w2v_model.wv.vocab.keys():
         word2vec_vectors.append(torch.FloatTensor(w2v_model[token]))
+        count_know+=1
     else:
         print("Not possible since fasttext", token)
         #print(stop)
         word2vec_vectors.append(torch.zeros(300))
+        count_unk+=1
 
 TRG.vocab.set_vectors(TRG.vocab.stoi, word2vec_vectors, 300)
+print("count unk", count_unk)
+print("count_know", count_know)
 
 
 
