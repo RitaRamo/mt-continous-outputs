@@ -20,6 +20,7 @@ import math
 import time
 
 from torchtext.data.metrics import bleu_score
+import logging
 from gensim.models import FastText
 
 
@@ -33,6 +34,7 @@ torch.backends.cudnn.deterministic = True
 
 
 ################### 1- Preparing Data #######################
+logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
 
 spacy_de = spacy.load('de_core_news_sm')
 spacy_en = spacy.load('en_core_web_sm')
