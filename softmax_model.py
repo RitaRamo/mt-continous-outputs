@@ -63,7 +63,7 @@ train_data, valid_data, test_data = Multi30k.splits(exts = ('.de', '.en'),
                                                     fields = (SRC, TRG))
 
 SRC.build_vocab(train_data, min_freq = 2)
-TRG.build_vocab(train_data, vectors = "glove.6B.300d", min_freq = 2)
+TRG.build_vocab(train_data, min_freq = 2)
 
 BATCH_SIZE = 128
 
@@ -331,9 +331,9 @@ model.apply(init_weights)
 #model.encoder.embedding.weight.data.copy_(pretrained_embeddings)
 #model.encoder.embedding.weight.requires_grad = False
 
-pretrained_embeddings_dec = TRG.vocab.vectors
-model.decoder.embedding.weight.data.copy_(pretrained_embeddings_dec)
-model.decoder.embedding.weight.requires_grad = False
+# pretrained_embeddings_dec = TRG.vocab.vectors
+# model.decoder.embedding.weight.data.copy_(pretrained_embeddings_dec)
+# model.decoder.embedding.weight.requires_grad = False
 
 def count_parameters(model):
     return sum(p.numel() for p in model.parameters() if p.requires_grad)
@@ -492,7 +492,7 @@ def calculate_bleu(data, src_field, trg_field, model, device, max_len = 50):
 
 
 if __name__ == '__main__':
-    N_EPOCHS = 7
+    N_EPOCHS = 10
     CLIP = 1
 
     best_valid_loss = float('inf')
