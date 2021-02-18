@@ -392,7 +392,7 @@ model.apply(init_weights)
 #model.encoder.embedding.weight.requires_grad = False
 
 pre_trained_emb = torch.FloatTensor(TRG.vocab.vectors)
-model.decoder.embedding.weight.data.copy_(pretrained_embeddings_dec)
+model.decoder.embedding.weight.data.copy_(pre_trained_emb)
 model.decoder.embedding.weight.requires_grad = False
 
 # pretrained_embeddings_dec = TRG.vocab.vectors
