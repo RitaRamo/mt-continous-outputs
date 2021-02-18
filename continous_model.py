@@ -103,7 +103,7 @@ for token, idx in tqdm_notebook(TRG.vocab.stoi.items()):
         word2vec_vectors.append(torch.FloatTensor(w2v_model[token]))
     else:
         print("Not possible since fasttext", token)
-        print(stop)
+        #print(stop)
         word2vec_vectors.append(torch.zeros(300))
 
 TRG.vocab.set_vectors(TRG.vocab.stoi, word2vec_vectors, 300)
